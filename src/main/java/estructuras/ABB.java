@@ -122,13 +122,17 @@ public class ABB {
     }
 
     private String filtrarPasajeros(Nodo nodo, Consulta consulta) {
-        if (nodo != null) {
-            if (nodo.derecho == null && nodo.izquierdo == null) {
-                return filtrar(nodo.pasajero, consulta.getRaiz()) ? nodo.pasajero + "|" : "";
+        if(nodo != null) {
+            if (nodo.izquierdo == null) {
+                return filtrar(nodo.pasajero, consulta.getRaiz()) ?
+                        nodo.pasajero.getId() + "|" + filtrarPasajeros(nodo.derecho, consulta) :
+                        "" + filtrarPasajeros(nodo.derecho, consulta);
             } else {
                 return filtrar(nodo.pasajero, consulta.getRaiz()) ?
-                        nodo.pasajero + "|" + filtrarPasajeros(nodo.derecho, consulta) + filtrarPasajeros(nodo.izquierdo, consulta) :
-                        filtrarPasajeros(nodo.derecho, consulta) + filtrarPasajeros(nodo.izquierdo, consulta);
+                        filtrarPasajeros(nodo.izquierdo, consulta) + nodo.pasajero.getId() + "|"
+                                + filtrarPasajeros(nodo.derecho, consulta) :
+                        filtrarPasajeros(nodo.izquierdo, consulta) + ""
+                                + filtrarPasajeros(nodo.derecho, consulta);
             }
         }
         return "";
@@ -140,7 +144,7 @@ public class ABB {
         } else if (nodo.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.NombreIgual)) {
             return p.getNombre().equals(nodo.getValorString());
         } else if (nodo.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.Nacionalidad)) {
-            return p.getNacionalidad().equals(nodo.getValorNacionalidad());
+            return p.getNacionalidad().equals(nodo.getValorNacionalidad().getCodigo());
         } else if (nodo.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.And)) {
             return filtrar(p, nodo.getIzq()) && filtrar(p, nodo.getDer());
         } else {
@@ -157,12 +161,10 @@ public class ABB {
         if (nodo != null) {
             if (nodo.derecho == null) {
                 return nodo.pasajero + "|" + imprimirEnOrdenDescendente(nodo.izquierdo);
-            } else if (nodo.izquierdo != null) {
+            } else {
                 return imprimirEnOrdenDescendente(nodo.derecho)
                         + nodo.pasajero + "|"
                         + imprimirEnOrdenDescendente(nodo.izquierdo);
-            } else {
-                return imprimirEnOrdenDescendente(nodo.derecho) + nodo.pasajero + "|";
             }
         }
         return "";
@@ -177,12 +179,10 @@ public class ABB {
         if (nodo != null) {
             if (nodo.izquierdo == null) {
                 return nodo.pasajero + "|" + imprimirEnOrdenAscedente(nodo.derecho);
-            } else if (nodo.derecho != null) {
+            } else {
                 return imprimirEnOrdenAscedente(nodo.izquierdo)
                         + nodo.pasajero + "|"
                         + imprimirEnOrdenAscedente(nodo.derecho);
-            } else {
-                return imprimirEnOrdenAscedente(nodo.izquierdo) + nodo.pasajero + "|";
             }
         }
         return "";
