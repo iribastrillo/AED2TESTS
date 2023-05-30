@@ -17,7 +17,7 @@ public class Estacion implements Comparable<Estacion> {
 
     @Override
     public String toString() {
-        return codigo;
+        return codigo + ";" + nombre;
     }
 
     @Override
