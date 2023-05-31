@@ -192,8 +192,6 @@ public class Grafo implements IGrafo {
     public boolean estaLlena() {
         return cantVertices == cantMaxVertices;
     }
-
-<<<<<<< HEAD
     public boolean dfs (String codigo, String otra) {
         boolean[] visitados = new boolean[cantMaxVertices];
         int pos = obtenerPos(new Estacion(codigo));
@@ -223,10 +221,7 @@ public class Grafo implements IGrafo {
         }
     }
 
-    public Lista bfsCantidadDeTrasbordos (String codigo, int cantidad) {
-=======
     public String bfsCantidadDeTrasbordos (String codigo, int cantidad) {
->>>>>>> develop
         int posicion = obtenerPos(new Estacion(codigo));
         int start = 0;
         Lista<String> stations = new Lista<>();
