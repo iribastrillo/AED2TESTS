@@ -29,7 +29,6 @@ public class Lista<T extends Comparable<T>> implements ILista<T>{
             inicio = nuevo;
         }
     }
-
     @Override
     public void borrar(T dato) {
         Nodo aux = inicio;
@@ -124,9 +123,9 @@ public class Lista<T extends Comparable<T>> implements ILista<T>{
         String s = "";
         Nodo aux = this.inicio;
         while (aux != null) {
-            s = s + aux.dato.toString();
+            s = s + aux.dato.toString() + "|";
             aux = aux.siguiente;
         }
-        return s;
+        return s.length() > 1 ? s.substring(0, s.length()-1) : s;
     }
 }
