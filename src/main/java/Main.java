@@ -92,6 +92,8 @@ public class Main {
 
         System.out.println(sistema.viajeCostoMinimoKilometros("MMM123", "ZZZ258"));
 
+        System.out.println(sistema.viajeCostoMinimoKilometros("MMM123", "FFF123"));
+
 
     }
 }
