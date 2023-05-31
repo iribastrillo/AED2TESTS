@@ -185,7 +185,7 @@ public class Grafo implements IGrafo {
         return cantVertices == cantMaxVertices;
     }
 
-    public Lista bfsCantidadDeTrasbordos (String codigo, int cantidad) {
+    public String bfsCantidadDeTrasbordos (String codigo, int cantidad) {
         int posicion = obtenerPos(new Estacion(codigo));
         int start = 0;
         Lista<String> stations = new Lista<>();
@@ -206,7 +206,7 @@ public class Grafo implements IGrafo {
             }
             start ++;
         }
-        return stations;
+        return stations.toString();
     }
 
     private class Vertice {
