@@ -90,7 +90,7 @@ public class Main {
 
         System.out.println("\n" + "----------TEST: Dijsktra  ----------" + "\n");
 
-        System.out.println(sistema.viajeCostoMinimoKilometros("MMM123", "FFF123"));
+        System.out.println(sistema.viajeCostoMinimoKilometros("MMM123", "ZZZ258"));
 
 
     }

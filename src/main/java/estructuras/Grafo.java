@@ -193,6 +193,35 @@ public class Grafo implements IGrafo {
         return cantVertices == cantMaxVertices;
     }
 
+    public boolean dfs (String codigo, String otra) {
+        boolean[] visitados = new boolean[cantMaxVertices];
+        int pos = obtenerPos(new Estacion(codigo));
+        dfs (pos, visitados);
+        int posOtra = obtenerPos(new Estacion(otra));
+        return visitados[posOtra];
+    }
+
+    private void dfs(int pos, boolean[] visitados) {
+        visitados[pos] = true;
+        for (int i = 0; i < cantMaxVertices; i++) {
+            Lista<Arista> aristas = matrizAdyacencia[pos][i];
+            if (!aristas.esVacia() && !visitados[i]) {
+                boolean esAdyacente = false;
+                Lista.Nodo aux = aristas.getInicio();
+                while (aux != null) {
+                    Arista arista = (Arista) aux.dato;
+                    if (arista.origen == vertices[pos].dato.getCodigo()) {
+                        esAdyacente = true;
+                    }
+                    aux = aux.getSiguiente();
+                }
+                if (esAdyacente) {
+                    dfs(i, visitados);
+                }
+            }
+        }
+    }
+
     public Lista bfsCantidadDeTrasbordos (String codigo, int cantidad) {
         int posicion = obtenerPos(new Estacion(codigo));
         int start = 0;
@@ -230,29 +259,30 @@ public class Grafo implements IGrafo {
         Vertice[] vengo = new Vertice[cantMaxVertices];
 
         for (int i = 0; i < cantMaxVertices; i++) {
-            costos[i] = Integer.MAX_VALUE; //Seria nuestro infinito
+            costos[i] = Integer.MAX_VALUE;
         }
 
         int pos = obtenerPos(new Estacion(vertOrigen));
-
         costos[pos] = 0;
 
         for (int v = 0; v < cantVertices; v++) {
             int posV = obtenerSiguienteVerticeNoVisitadoDeMenorCosto(costos, visitados);
-
             visitados[posV] = true;
-
             for (int i = 0; i < cantMaxVertices; i++) {
                 if (!matrizAdyacencia[posV][i].esVacia() && !visitados[i]) {
                     Lista<Arista> aristas = matrizAdyacencia[posV][i];
                     Lista<Arista>.Nodo aux = aristas.getInicio();
+                    Arista minimo = aux.dato;
                     while (aux != null) {
-                        double distanciaNueva = costos[posV] + aux.dato.distancia;
-                        if (costos[i] > distanciaNueva) {
-                            costos[i] = distanciaNueva;
-                            vengo[i] = vertices[posV];
+                        if (minimo.distancia > aux.dato.distancia) {
+                            minimo = aux.dato;
                         }
                         aux = aux.getSiguiente();
+                    }
+                    double distanciaNueva = costos[posV] + minimo.distancia;
+                    if (costos[i] > distanciaNueva) {
+                        costos[i] = distanciaNueva;
+                        vengo[i] = vertices[posV];
                     }
                 }
             }
@@ -282,7 +312,7 @@ public class Grafo implements IGrafo {
 
     private int obtenerSiguienteVerticeNoVisitadoDeMenorCosto(double[] costos, boolean[] visitados) {
         int posMin = -1;
-        double min = Integer.MAX_VALUE; // Infinito
+        double min = Integer.MAX_VALUE;
         for (int i = 0; i < cantMaxVertices; i++) {
             if (!visitados[i] && costos[i] < min) {
                 min = costos[i];
@@ -292,22 +322,6 @@ public class Grafo implements IGrafo {
         }
         return posMin;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private class Vertice {
         private Estacion dato;
 

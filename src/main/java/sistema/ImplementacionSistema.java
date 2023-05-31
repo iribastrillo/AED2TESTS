@@ -265,19 +265,23 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error2("E2: El código de destino no es válido.");
         }
         if (!Codigo.validate(codigoEstacionOrigen)) {
-            return Retorno.error2("E3: El código de origen no es válido.");
+            return Retorno.error2("E2: El código de origen no es válido.");
+        }
+
+        if (!conexiones.dfs(codigoEstacionOrigen, codigoEstacionDestino)) {
+            return Retorno.error3("E3: No hay un camino entre el origen y el destino");
         }
 
         Estacion origin = new Estacion(codigoEstacionOrigen);
         Estacion destination = new Estacion(codigoEstacionDestino);
 
-//        if (!stations.existe(origin)) {
-//            return Retorno.error4("E4: No existe la estación de origen");
-//        }
-//
-//        if (!stations.existe(destination)) {
-//            return Retorno.error5("E4: No existe la estación de destino");
-//        }
+        if (!this.conexiones.existeVertice(origin)) {
+            return Retorno.error4("E4: No existe la estación de origen.");
+        }
+
+        if (!this.conexiones.existeVertice(destination)) {
+            return Retorno.error5("E5: No existe la estación de destino.");
+        }
         return Retorno.ok(conexiones.costoMinKm(codigoEstacionOrigen, codigoEstacionDestino));
     }
 
