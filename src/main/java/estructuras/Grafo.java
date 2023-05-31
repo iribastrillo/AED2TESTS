@@ -183,8 +183,36 @@ public class Grafo implements IGrafo {
     public boolean estaLlena() {
         return cantVertices == cantMaxVertices;
     }
+    public boolean dfs (String codigo, String otra) {
+        boolean[] visitados = new boolean[cantMaxVertices];
+        int pos = obtenerPos(new Estacion(codigo));
+        dfs (pos, visitados);
+        int posOtra = obtenerPos(new Estacion(otra));
+        return visitados[posOtra];
+    }
 
-    public Lista bfsCantidadDeTrasbordos (String codigo, int cantidad) {
+    private void dfs(int pos, boolean[] visitados) {
+        visitados[pos] = true;
+        for (int i = 0; i < cantMaxVertices; i++) {
+            Lista<Arista> aristas = matrizAdyacencia[pos][i];
+            if (!aristas.esVacia() && !visitados[i]) {
+                boolean esAdyacente = false;
+                Lista.Nodo aux = aristas.getInicio();
+                while (!esAdyacente && aux != null) {
+                    Arista arista = (Arista) aux.dato;
+                    if (arista.origen == vertices[pos].dato.getCodigo()) {
+                        esAdyacente = true;
+                    }
+                    aux = aux.getSiguiente();
+                }
+                if (esAdyacente) {
+                    dfs(i, visitados);
+                }
+            }
+        }
+    }
+
+    public String bfsCantidadDeTrasbordos (String codigo, int cantidad) {
         int posicion = obtenerPos(new Estacion(codigo));
         int start = 0;
         Lista<String> stations = new Lista<>();
@@ -196,7 +224,7 @@ public class Grafo implements IGrafo {
             Tupla current = cola.dequeue();
             Vertice vertex = vertices[current.pos];
             Estacion station = vertex.dato;
-            stations.insertar(station.toString() + " " + current.salto + " |");
+            stations.insertar(station.toString());
             for (int i = 0; i < cantMaxVertices; i++) {
                 if (!matrizAdyacencia[current.pos][i].esVacia() && !visitados[i]) {
                     cola.enqueue(new Tupla (i, current.salto + 1));
@@ -205,7 +233,7 @@ public class Grafo implements IGrafo {
             }
             start ++;
         }
-        return stations;
+        return stations.toString();
     }
 
 
@@ -230,12 +258,10 @@ public class Grafo implements IGrafo {
         for (int v = 0; v < cantVertices; v++) {
             int posV = obtenerSiguienteVerticeNoVisitadoDeMenorCosto(costos, visitados);
             visitados[posV] = true;
-
             for (int i = 0; i < cantMaxVertices; i++) {
                 if (!matrizAdyacencia[posV][i].esVacia() && !visitados[i]) {
                     Lista<Arista> aristas = matrizAdyacencia[posV][i];
                     Lista<Arista>.Nodo aristaMin = obtenerAristaMinima(aristas);
-
                         double distanciaNueva = costos[posV] + aristaMin.dato.distancia;
                         if (costos[i] > distanciaNueva) {
                             costos[i] = distanciaNueva;
@@ -269,7 +295,7 @@ public class Grafo implements IGrafo {
 
     private int obtenerSiguienteVerticeNoVisitadoDeMenorCosto(double[] costos, boolean[] visitados) {
         int posMin = -1;
-        double min = Integer.MAX_VALUE; // Infinito
+        double min = Integer.MAX_VALUE;
         for (int i = 0; i < cantMaxVertices; i++) {
             if (!visitados[i] && costos[i] < min) {
                 min = costos[i];
@@ -279,7 +305,6 @@ public class Grafo implements IGrafo {
         }
         return posMin;
     }
-
     private Lista<Arista>.Nodo obtenerAristaMinima(Lista<Arista> aristas) {
         double min = Integer.MAX_VALUE;
         Lista<Arista>.Nodo arista = aristas.getInicio();
@@ -293,22 +318,6 @@ public class Grafo implements IGrafo {
         }
         return aux;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private class Vertice {
         private Estacion dato;
 

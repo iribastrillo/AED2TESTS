@@ -253,7 +253,7 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error4("E4: No existe la estación de origen.");
         }
 
-        return Retorno.ok(conexiones.bfsCantidadDeTrasbordos(codigo, cantidad).toString());
+        return Retorno.ok(conexiones.bfsCantidadDeTrasbordos(codigo, cantidad));
     }
 
     @Override
@@ -261,29 +261,59 @@ public class ImplementacionSistema implements Sistema {
         if (!NoVacio.validate(codigoEstacionOrigen) || !NoVacio.validate(codigoEstacionDestino)) {
             return Retorno.error1("E2: El código de origen y destino no pueden ser vacíos.");
         }
-        if (!NoVacio.validate(codigoEstacionDestino)) {
+        if (!Codigo.validate(codigoEstacionDestino)) {
             return Retorno.error2("E2: El código de destino no es válido.");
         }
         if (!Codigo.validate(codigoEstacionOrigen)) {
-            return Retorno.error2("E3: El código de origen no es válido.");
+            return Retorno.error2("E2: El código de origen no es válido.");
         }
 
         Estacion origin = new Estacion(codigoEstacionOrigen);
         Estacion destination = new Estacion(codigoEstacionDestino);
 
-//        if (!stations.existe(origin)) {
-//            return Retorno.error4("E4: No existe la estación de origen");
-//        }
-//
-//        if (!stations.existe(destination)) {
-//            return Retorno.error5("E4: No existe la estación de destino");
-//        }
+        if (!this.conexiones.existeVertice(origin)) {
+            return Retorno.error4("E4: No existe la estación de origen.");
+        }
+
+        if (!this.conexiones.existeVertice(destination)) {
+            return Retorno.error5("E5: No existe la estación de destino.");
+        }
+
+        if (!conexiones.dfs(codigoEstacionOrigen, codigoEstacionDestino)) {
+            return Retorno.error3("E3: No hay un camino entre el origen y el destino");
+        }
+
         return Retorno.ok(conexiones.costoMinKm(codigoEstacionOrigen, codigoEstacionDestino));
     }
 
     @Override
     public Retorno viajeCostoMinimoEuros(String codigoEstacionOrigen, String codigoEstacionDestino) {
-        return null;
+        if (!NoVacio.validate(codigoEstacionOrigen) || !NoVacio.validate(codigoEstacionDestino)) {
+            return Retorno.error1("E2: El código de origen y destino no pueden ser vacíos.");
+        }
+        if (!Codigo.validate(codigoEstacionDestino)) {
+            return Retorno.error2("E2: El código de destino no es válido.");
+        }
+        if (!Codigo.validate(codigoEstacionOrigen)) {
+            return Retorno.error2("E2: El código de origen no es válido.");
+        }
+        Estacion origin = new Estacion(codigoEstacionOrigen);
+        Estacion destination = new Estacion(codigoEstacionDestino);
+
+        if (!this.conexiones.existeVertice(origin)) {
+            return Retorno.error4("E4: No existe la estación de origen.");
+        }
+
+        if (!this.conexiones.existeVertice(destination)) {
+            return Retorno.error5("E5: No existe la estación de destino.");
+        }
+
+        if (!conexiones.dfs(codigoEstacionOrigen, codigoEstacionDestino)) {
+            return Retorno.error3("E3: No hay un camino entre el origen y el destino");
+        }
+
+
+        return Retorno.ok(conexiones.costoMinKm(codigoEstacionOrigen, codigoEstacionDestino));
     }
 
     public ABB getAbbPasajeros() {
