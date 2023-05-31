@@ -207,7 +207,7 @@ public class Grafo implements IGrafo {
             if (!aristas.esVacia() && !visitados[i]) {
                 boolean esAdyacente = false;
                 Lista.Nodo aux = aristas.getInicio();
-                while (aux != null) {
+                while (!esAdyacente && aux != null) {
                     Arista arista = (Arista) aux.dato;
                     if (arista.origen == vertices[pos].dato.getCodigo()) {
                         esAdyacente = true;
