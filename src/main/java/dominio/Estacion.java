@@ -26,6 +26,10 @@ public class Estacion implements Comparable<Estacion> {
         return codigo.equals(otro.codigo);
     }
 
+    public boolean equals(String otroCodigo) {
+        return codigo.equals(otroCodigo);
+    }
+
     public String getCodigo() {
         return codigo;
     }

@@ -1,7 +1,6 @@
 package estructuras;
 
 import dominio.Estacion;
-import dominio.vo.Estado;
 import interfaz.EstadoCamino;
 
 public class Grafo implements IGrafo {
@@ -46,6 +45,15 @@ public class Grafo implements IGrafo {
         for (int i = 0; i < cantMaxVertices; i++) {
             if (vertices[i] != null && vertices[i].equals(vert))
                 return i;
+        }
+        return -1;
+    }
+
+    private int obtenerPos(String codigo) {
+        for (int i = 0; i < cantMaxVertices; i++) {
+            if (vertices[i] != null && vertices[i].equals(codigo)) {
+                return i;
+            }
         }
         return -1;
     }
@@ -208,6 +216,97 @@ public class Grafo implements IGrafo {
         }
         return stations;
     }
+
+
+
+
+    public String costoMinKm(String origen, String destino) {
+        return dijkstra(origen, destino);
+    }
+
+    private String dijkstra(String vertOrigen, String vertDestino ) {
+        boolean[] visitados = new boolean[cantMaxVertices];
+        double[] costos = new double[cantMaxVertices];
+        Vertice[] vengo = new Vertice[cantMaxVertices];
+
+        for (int i = 0; i < cantMaxVertices; i++) {
+            costos[i] = Integer.MAX_VALUE; //Seria nuestro infinito
+        }
+
+        int pos = obtenerPos(new Estacion(vertOrigen));
+
+        costos[pos] = 0;
+
+        for (int v = 0; v < cantVertices; v++) {
+            int posV = obtenerSiguienteVerticeNoVisitadoDeMenorCosto(costos, visitados);
+
+            visitados[posV] = true;
+
+            for (int i = 0; i < cantMaxVertices; i++) {
+                if (!matrizAdyacencia[posV][i].esVacia() && !visitados[i]) {
+                    Lista<Arista> aristas = matrizAdyacencia[posV][i];
+                    Lista<Arista>.Nodo aux = aristas.getInicio();
+                    while (aux != null) {
+                        double distanciaNueva = costos[posV] + aux.dato.distancia;
+                        if (costos[i] > distanciaNueva) {
+                            costos[i] = distanciaNueva;
+                            vengo[i] = vertices[posV];
+                        }
+                        aux = aux.getSiguiente();
+                    }
+                }
+            }
+        }
+
+        String camino = "";
+        int posDestino = obtenerPos(new Estacion(vertDestino));
+        camino = vertices[posDestino].toString();
+
+        int posDestinoAux = obtenerPos(new Estacion(vertDestino));
+
+        Vertice vAnt = vengo[posDestinoAux];
+        camino = vAnt + " " + camino;
+
+        while(vAnt!=null){
+            posDestinoAux = obtenerPos(new Estacion(vAnt.getNombre()));
+            vAnt = vengo[posDestinoAux];
+            if(vAnt!=null){
+                camino = vAnt + " " + camino;
+            }
+        }
+
+        String response1 = "El camino del vertice " + vertOrigen + " al vertice "+ vertices[posDestino] + " es: " + camino;
+        String response2 = "El costo del camino entre A y "+ vertices[posDestino] +" es: " + costos[posDestino];
+        return response1 + response2;
+    }
+
+    private int obtenerSiguienteVerticeNoVisitadoDeMenorCosto(double[] costos, boolean[] visitados) {
+        int posMin = -1;
+        double min = Integer.MAX_VALUE; // Infinito
+        for (int i = 0; i < cantMaxVertices; i++) {
+            if (!visitados[i] && costos[i] < min) {
+                min = costos[i];
+                posMin = i;
+
+            }
+        }
+        return posMin;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private class Vertice {
         private Estacion dato;

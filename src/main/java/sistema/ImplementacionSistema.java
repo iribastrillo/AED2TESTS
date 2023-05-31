@@ -258,7 +258,7 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno viajeCostoMinimoKilometros(String codigoEstacionOrigen, String codigoEstacionDestino) {
-        if (NoVacio.validate(codigoEstacionOrigen) || NoVacio.validate(codigoEstacionDestino)) {
+        if (!NoVacio.validate(codigoEstacionOrigen) || !NoVacio.validate(codigoEstacionDestino)) {
             return Retorno.error1("E2: El código de origen y destino no pueden ser vacíos.");
         }
         if (!NoVacio.validate(codigoEstacionDestino)) {
@@ -278,7 +278,7 @@ public class ImplementacionSistema implements Sistema {
 //        if (!stations.existe(destination)) {
 //            return Retorno.error5("E4: No existe la estación de destino");
 //        }
-        return Retorno.noImplementada();
+        return Retorno.ok(conexiones.costoMinKm(codigoEstacionOrigen, codigoEstacionDestino));
     }
 
     @Override
