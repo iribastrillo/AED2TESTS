@@ -49,15 +49,6 @@ public class Grafo implements IGrafo {
         return -1;
     }
 
-    private int obtenerPos(String codigo) {
-        for (int i = 0; i < cantMaxVertices; i++) {
-            if (vertices[i] != null && vertices[i].equals(codigo)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     @Override
     public void agregarArista(Estacion origen, Estacion destino, int identificador, double costo, double distancia, EstadoCamino estado, double tiempo) {
         int obtenerPosOrigen = obtenerPos(origen);
@@ -230,30 +221,26 @@ public class Grafo implements IGrafo {
         Vertice[] vengo = new Vertice[cantMaxVertices];
 
         for (int i = 0; i < cantMaxVertices; i++) {
-            costos[i] = Integer.MAX_VALUE; //Seria nuestro infinito
+            costos[i] = Integer.MAX_VALUE;
         }
 
         int pos = obtenerPos(new Estacion(vertOrigen));
-
         costos[pos] = 0;
 
         for (int v = 0; v < cantVertices; v++) {
             int posV = obtenerSiguienteVerticeNoVisitadoDeMenorCosto(costos, visitados);
-
             visitados[posV] = true;
 
             for (int i = 0; i < cantMaxVertices; i++) {
                 if (!matrizAdyacencia[posV][i].esVacia() && !visitados[i]) {
                     Lista<Arista> aristas = matrizAdyacencia[posV][i];
-                    Lista<Arista>.Nodo aux = aristas.getInicio();
-                    while (aux != null) {
-                        double distanciaNueva = costos[posV] + aux.dato.distancia;
+                    Lista<Arista>.Nodo aristaMin = obtenerAristaMinima(aristas);
+
+                        double distanciaNueva = costos[posV] + aristaMin.dato.distancia;
                         if (costos[i] > distanciaNueva) {
                             costos[i] = distanciaNueva;
                             vengo[i] = vertices[posV];
                         }
-                        aux = aux.getSiguiente();
-                    }
                 }
             }
         }
@@ -291,6 +278,20 @@ public class Grafo implements IGrafo {
             }
         }
         return posMin;
+    }
+
+    private Lista<Arista>.Nodo obtenerAristaMinima(Lista<Arista> aristas) {
+        double min = Integer.MAX_VALUE;
+        Lista<Arista>.Nodo arista = aristas.getInicio();
+        Lista<Arista>.Nodo aux = null;
+        while (arista != null) {
+            if(arista.dato.distancia < min) {
+                min = arista.dato.distancia;
+                aux = arista;
+            }
+            arista = arista.getSiguiente();
+        }
+        return aux;
     }
 
 
