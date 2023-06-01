@@ -236,14 +236,15 @@ public class Grafo implements IGrafo {
         return stations.toString();
     }
 
-
-
-
-    public String costoMinKm(String origen, String destino) {
-        return dijkstra(origen, destino);
+    public String costoMinEuros(String origen, String destino) {
+        return dijkstra(origen, destino, false);
     }
 
-    private String dijkstra(String vertOrigen, String vertDestino ) {
+    public String costoMinKm(String origen, String destino) {
+        return dijkstra(origen, destino, true);
+    }
+
+    private String dijkstra(String vertOrigen, String vertDestino, boolean tipo) {
         boolean[] visitados = new boolean[cantMaxVertices];
         double[] costos = new double[cantMaxVertices];
         Vertice[] vengo = new Vertice[cantMaxVertices];
@@ -261,10 +262,11 @@ public class Grafo implements IGrafo {
             for (int i = 0; i < cantMaxVertices; i++) {
                 if (!matrizAdyacencia[posV][i].esVacia() && !visitados[i]) {
                     Lista<Arista> aristas = matrizAdyacencia[posV][i];
-                    Lista<Arista>.Nodo aristaMin = obtenerAristaMinima(aristas);
-                        double distanciaNueva = costos[posV] + aristaMin.dato.distancia;
-                        if (costos[i] > distanciaNueva) {
-                            costos[i] = distanciaNueva;
+                    Lista<Arista>.Nodo aristaMin = obtenerAristaMinimaEnBuenEstado(aristas, tipo);
+                    double costo = tipo ? aristaMin.dato.distancia : aristaMin.dato.costo;
+                        double costoNuevo = costos[posV] + costo;
+                        if (costos[i] > costoNuevo) {
+                            costos[i] = costoNuevo;
                             vengo[i] = vertices[posV];
                         }
                 }
@@ -306,13 +308,15 @@ public class Grafo implements IGrafo {
         return posMin;
     }
 
-    private Lista<Arista>.Nodo obtenerAristaMinima(Lista<Arista> aristas) {
+    private Lista<Arista>.Nodo obtenerAristaMinimaEnBuenEstado(Lista<Arista> aristas, boolean tipo) {
         double min = Integer.MAX_VALUE;
         Lista<Arista>.Nodo arista = aristas.getInicio();
         Lista<Arista>.Nodo aux = null;
+        double costo;
         while (arista != null) {
-            if(arista.dato.distancia < min) {
-                min = arista.dato.distancia;
+            costo = tipo ? arista.dato.distancia : arista.dato.costo;
+            if(costo < min && arista.dato.estado != EstadoCamino.MALO) {
+                min = costo;
                 aux = arista;
             }
             arista = arista.getSiguiente();
