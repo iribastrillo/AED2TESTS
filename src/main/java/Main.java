@@ -33,15 +33,18 @@ public class Main {
         System.out.println(sistema.registrarEstacionDeTren("AAA143", "DORTMUND"));
         System.out.println(sistema.registrarEstacionDeTren("ABQ143", "NANTES"));
         System.out.println(sistema.registrarEstacionDeTren("QZY143", "LONDRES"));
-        System.out.println(sistema.registrarEstacionDeTren("MMM123", "MADRID"));
         System.out.println(sistema.registrarEstacionDeTren("KJL589", "BERLIN"));
         System.out.println(sistema.registrarEstacionDeTren("UYT896", "OSLO"));
-        System.out.println(sistema.registrarEstacionDeTren("LLL00", "MALAGA"));
-        System.out.println(sistema.registrarEstacionDeTren("AAA1234", "BARCELONA"));
-        System.out.println(sistema.registrarEstacionDeTren("A♪B456", "VALENCIA"));
-        System.out.println(sistema.registrarEstacionDeTren("", "NIZA"));
         System.out.println(sistema.registrarEstacionDeTren("AEA143", "MANCHESTER"));
         System.out.println(sistema.registrarEstacionDeTren("ZZZ258", "MONTPELLIER"));
+
+        System.out.println("\n" + "----------TESTEO METODO registrarEstacionDeTren----------" + "\n");
+
+        System.out.println(sistema.registrarEstacionDeTren("MMM123", "MADRID")); //
+        System.out.println(sistema.registrarEstacionDeTren("LLL00", "MALAGA")); //
+        System.out.println(sistema.registrarEstacionDeTren("AAA1234", "BARCELONA")); //
+        System.out.println(sistema.registrarEstacionDeTren("A♪B456", "VALENCIA")); //
+        System.out.println(sistema.registrarEstacionDeTren("", "NIZA")); //
 
         System.out.println("\n" + "----------TESTEO METODO filtrarPasajeros----------" + "\n");
 
@@ -64,16 +67,37 @@ public class Main {
                 10, 50, 50, 100, EstadoCamino.BUENO));
         System.out.println(sistema.registrarConexion("FFF123", "AAA143",
                 2, 3, 100, 200, EstadoCamino.BUENO));
-        System.out.println(sistema.registrarConexion("RRR123", "FFF123",
-                3, 50, 50, 50, EstadoCamino.BUENO));
-        System.out.println(sistema.registrarConexion("MMM123", "WWW123",
-                4, 50, 50, 50, EstadoCamino.BUENO));
+        System.out.println(sistema.registrarConexion("AAA143", "QZY143",
+                11, 30, 60, 30, EstadoCamino.BUENO));
+        System.out.println(sistema.registrarConexion("QZY143", "KJL589",
+                12, 70, 120, 230, EstadoCamino.BUENO));
+        System.out.println(sistema.registrarConexion("KJL589", "UYT896",
+                13, 40, 80, 170, EstadoCamino.BUENO));
+        System.out.println(sistema.registrarConexion("QZY143", "AEA143",
+                14, 60, 90, 130, EstadoCamino.BUENO));
+        System.out.println(sistema.registrarConexion("ZZZ258", "MMM123",
+                15, 40, 90, 160, EstadoCamino.BUENO));
+        System.out.println(sistema.registrarConexion("UYT896", "MMM123",
+                16, 50, 50, 170, EstadoCamino.BUENO));
         System.out.println(sistema.registrarConexion("AAA143", "ABQ143",
                 7, 50, 50, 50, EstadoCamino.BUENO));
         System.out.println(sistema.registrarConexion("KJL589", "UYT896",
                 8, 50, 50, 50, EstadoCamino.BUENO));
         System.out.println(sistema.registrarConexion("MMM123", "FFF123",
-                9, 50, 50, 50, EstadoCamino.MALO));
+                9, 50, 50, 50, EstadoCamino.BUENO));
+        System.out.println(sistema.registrarConexion("ABQ143", "MMM123",
+                17, 50, 50, 30, EstadoCamino.BUENO));
+        System.out.println(sistema.registrarConexion("ZZZ258", "ABQ143",
+                18, 50, 50, 50, EstadoCamino.BUENO));
+        System.out.println(sistema.registrarConexion("AEA143", "ZZZ258",
+                18, 50, 50, 50, EstadoCamino.BUENO));
+
+        System.out.println("\n" + "----------TEST: ERROR-Registrar conexión  ----------" + "\n");
+
+        System.out.println(sistema.registrarConexion("RRR123", "FFF123",
+                3, 50, 50, 50, EstadoCamino.BUENO)); //
+        System.out.println(sistema.registrarConexion("MMM123", "WWW123",
+                4, 50, 50, 50, EstadoCamino.BUENO)); //
 
         System.out.println("\n" + "----------TEST: Actualizar camino  ----------" + "\n");
 
@@ -90,12 +114,19 @@ public class Main {
 
         System.out.println("\n" + "----------TEST: Dijsktra  ----------" + "\n");
 
+        System.out.println(sistema.viajeCostoMinimoKilometros("MMM123", "FFF123"));
+        System.out.println(sistema.viajeCostoMinimoKilometros("AEA143", "ABQ143"));
+
+
         System.out.println("\n" + ">>> PRIMERO SIN CAMINO : PRUEBA ERROR 3  ----------" + "\n");
         System.out.println(sistema.viajeCostoMinimoKilometros("MMM123", "ZZZ258"));
         System.out.println(sistema.registrarConexion("AAA143", "ZZZ258",
                 12, 1, 30, 30, EstadoCamino.BUENO));
         System.out.println(sistema.registrarConexion("MMM123", "AAA143",
                 13, 1, 30, 30, EstadoCamino.BUENO));
+
+
+
         System.out.println("\n" + ">>> TRAS AGREGAR ESTACIONES INTERMEDIAS ----------" + "\n");
         System.out.println(sistema.viajeCostoMinimoKilometros("MMM123", "ZZZ258"));
     }

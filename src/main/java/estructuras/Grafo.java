@@ -281,7 +281,7 @@ public class Grafo implements IGrafo {
         camino = vAnt + " " + camino;
 
         while(vAnt!=null){
-            posDestinoAux = obtenerPos(new Estacion(vAnt.getNombre()));
+            posDestinoAux = obtenerPos(new Estacion(vAnt.dato.getCodigo()));
             vAnt = vengo[posDestinoAux];
             if(vAnt!=null){
                 camino = vAnt + " " + camino;
@@ -289,7 +289,7 @@ public class Grafo implements IGrafo {
         }
 
         String response1 = "El camino del vertice " + vertOrigen + " al vertice "+ vertices[posDestino] + " es: " + camino;
-        String response2 = "El costo del camino entre A y "+ vertices[posDestino] +" es: " + costos[posDestino];
+        String response2 = " El costo del camino entre "+ vertOrigen +" y "+ vertices[posDestino] +" es: " + costos[posDestino];
         return response1 + response2;
     }
 
@@ -305,6 +305,7 @@ public class Grafo implements IGrafo {
         }
         return posMin;
     }
+
     private Lista<Arista>.Nodo obtenerAristaMinima(Lista<Arista> aristas) {
         double min = Integer.MAX_VALUE;
         Lista<Arista>.Nodo arista = aristas.getInicio();
@@ -318,6 +319,7 @@ public class Grafo implements IGrafo {
         }
         return aux;
     }
+
     private class Vertice {
         private Estacion dato;
 
@@ -340,6 +342,11 @@ public class Grafo implements IGrafo {
             if (o == null) return false;
             Estacion vertice = (Estacion) o;
             return this.dato.equals(vertice);
+        }
+
+        @Override
+        public String toString() {
+            return this.dato.getCodigo();
         }
     }
 
