@@ -49,15 +49,6 @@ public class Grafo implements IGrafo {
         return -1;
     }
 
-    private int obtenerPos(String codigo) {
-        for (int i = 0; i < cantMaxVertices; i++) {
-            if (vertices[i] != null && vertices[i].equals(codigo)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     @Override
     public void agregarArista(Estacion origen, Estacion destino, int identificador, double costo, double distancia, EstadoCamino estado, double tiempo) {
         int obtenerPosOrigen = obtenerPos(origen);
@@ -245,14 +236,15 @@ public class Grafo implements IGrafo {
         return stations.toString();
     }
 
-
-
-
-    public String costoMinKm(String origen, String destino) {
-        return dijkstra(origen, destino);
+    public String costoMinEuros(String origen, String destino) {
+        return dijkstra(origen, destino, false);
     }
 
-    private String dijkstra(String vertOrigen, String vertDestino ) {
+    public String costoMinKm(String origen, String destino) {
+        return dijkstra(origen, destino, true);
+    }
+
+    private String dijkstra(String vertOrigen, String vertDestino, boolean tipo) {
         boolean[] visitados = new boolean[cantMaxVertices];
         double[] costos = new double[cantMaxVertices];
         Vertice[] vengo = new Vertice[cantMaxVertices];
@@ -270,19 +262,13 @@ public class Grafo implements IGrafo {
             for (int i = 0; i < cantMaxVertices; i++) {
                 if (!matrizAdyacencia[posV][i].esVacia() && !visitados[i]) {
                     Lista<Arista> aristas = matrizAdyacencia[posV][i];
-                    Lista<Arista>.Nodo aux = aristas.getInicio();
-                    Arista minimo = aux.dato;
-                    while (aux != null) {
-                        if (minimo.distancia > aux.dato.distancia) {
-                            minimo = aux.dato;
+                    Lista<Arista>.Nodo aristaMin = obtenerAristaMinimaEnBuenEstado(aristas, tipo);
+                    double costo = tipo ? aristaMin.dato.distancia : aristaMin.dato.costo;
+                        double costoNuevo = costos[posV] + costo;
+                        if (costos[i] > costoNuevo) {
+                            costos[i] = costoNuevo;
+                            vengo[i] = vertices[posV];
                         }
-                        aux = aux.getSiguiente();
-                    }
-                    double distanciaNueva = costos[posV] + minimo.distancia;
-                    if (costos[i] > distanciaNueva) {
-                        costos[i] = distanciaNueva;
-                        vengo[i] = vertices[posV];
-                    }
                 }
             }
         }
@@ -297,7 +283,7 @@ public class Grafo implements IGrafo {
         camino = vAnt + " " + camino;
 
         while(vAnt!=null){
-            posDestinoAux = obtenerPos(new Estacion(vAnt.getNombre()));
+            posDestinoAux = obtenerPos(new Estacion(vAnt.dato.getCodigo()));
             vAnt = vengo[posDestinoAux];
             if(vAnt!=null){
                 camino = vAnt + " " + camino;
@@ -305,7 +291,7 @@ public class Grafo implements IGrafo {
         }
 
         String response1 = "El camino del vertice " + vertOrigen + " al vertice "+ vertices[posDestino] + " es: " + camino;
-        String response2 = "El costo del camino entre A y "+ vertices[posDestino] +" es: " + costos[posDestino];
+        String response2 = " El costo del camino entre "+ vertOrigen +" y "+ vertices[posDestino] +" es: " + costos[posDestino];
         return response1 + response2;
     }
 
@@ -321,6 +307,23 @@ public class Grafo implements IGrafo {
         }
         return posMin;
     }
+
+    private Lista<Arista>.Nodo obtenerAristaMinimaEnBuenEstado(Lista<Arista> aristas, boolean tipo) {
+        double min = Integer.MAX_VALUE;
+        Lista<Arista>.Nodo arista = aristas.getInicio();
+        Lista<Arista>.Nodo aux = null;
+        double costo;
+        while (arista != null) {
+            costo = tipo ? arista.dato.distancia : arista.dato.costo;
+            if(costo < min && arista.dato.estado != EstadoCamino.MALO) {
+                min = costo;
+                aux = arista;
+            }
+            arista = arista.getSiguiente();
+        }
+        return aux;
+    }
+
     private class Vertice {
         private Estacion dato;
 
@@ -343,6 +346,11 @@ public class Grafo implements IGrafo {
             if (o == null) return false;
             Estacion vertice = (Estacion) o;
             return this.dato.equals(vertice);
+        }
+
+        @Override
+        public String toString() {
+            return this.dato.getCodigo();
         }
     }
 

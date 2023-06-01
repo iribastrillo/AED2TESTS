@@ -19,6 +19,7 @@ public class Lista<T extends Comparable<T>> implements ILista<T>{
     public Nodo getInicio () {
         return this.inicio;
     }
+
     @Override
     public void insertar(T dato) {
         Nodo nuevo = new Nodo(dato);

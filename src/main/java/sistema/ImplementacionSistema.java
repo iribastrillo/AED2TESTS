@@ -310,7 +310,7 @@ public class ImplementacionSistema implements Sistema {
         }
 
 
-        return Retorno.ok(conexiones.costoMinKm(codigoEstacionOrigen, codigoEstacionDestino));
+        return Retorno.ok(conexiones.costoMinEuros(codigoEstacionOrigen, codigoEstacionDestino));
     }
 
     public ABB getAbbPasajeros() {
