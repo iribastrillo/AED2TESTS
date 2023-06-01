@@ -147,8 +147,8 @@ public class Main {
 
         System.out.println("\n" + "----------TEST: Dijsktra minimo en costo ----------" + "\n");
 
-//        System.out.println(sistema.viajeCostoMinimoEuros("MMM123", "FFF123"));
-//        System.out.println(sistema.viajeCostoMinimoEuros("AEA143", "ABQ143"));
+        System.out.println(sistema.viajeCostoMinimoEuros("MMM123", "FFF123"));
+        System.out.println(sistema.viajeCostoMinimoEuros("AEA143", "ABQ143"));
 
 
         System.out.println("\n" + ">>> PRIMERO SIN CAMINO : PRUEBA ERROR 3  ----------" + "\n");
