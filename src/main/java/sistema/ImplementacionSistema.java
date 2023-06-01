@@ -280,7 +280,10 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error3("E3: No hay un camino entre el origen y el destino");
         }
 
-        return Retorno.ok(conexiones.costoMinKm(codigoEstacionOrigen, codigoEstacionDestino));
+        String response = conexiones.costoMinKm(codigoEstacionOrigen, codigoEstacionDestino);
+        int valorEntero = (int)Double.parseDouble(response.split("-")[0]);
+        String valorString = response.split("-")[1];
+        return Retorno.ok(valorEntero, valorString);
     }
 
     @Override
@@ -309,8 +312,10 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error3("E3: No hay un camino entre el origen y el destino");
         }
 
-
-        return Retorno.ok(conexiones.costoMinEuros(codigoEstacionOrigen, codigoEstacionDestino));
+        String response = conexiones.costoMinEuros(codigoEstacionOrigen, codigoEstacionDestino);
+        int valorEntero = (int)Double.parseDouble(response.split("-")[0]);
+        String valorString = response.split("-")[1];
+        return Retorno.ok(valorEntero, valorString);
     }
 
     public ABB getAbbPasajeros() {

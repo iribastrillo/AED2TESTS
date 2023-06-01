@@ -275,24 +275,23 @@ public class Grafo implements IGrafo {
 
         String camino = "";
         int posDestino = obtenerPos(new Estacion(vertDestino));
-        camino = vertices[posDestino].toString();
+        Estacion aux = vertices[posDestino].dato;
+        camino = aux.getCodigo() + ";" + aux.getNombre();
 
         int posDestinoAux = obtenerPos(new Estacion(vertDestino));
 
         Vertice vAnt = vengo[posDestinoAux];
-        camino = vAnt + " " + camino;
+        camino = vAnt.dato.getCodigo() + ";" + vAnt.dato.getNombre() + "|" + camino;
 
         while(vAnt!=null){
             posDestinoAux = obtenerPos(new Estacion(vAnt.dato.getCodigo()));
             vAnt = vengo[posDestinoAux];
             if(vAnt!=null){
-                camino = vAnt + " " + camino;
+                camino = vAnt.dato.getCodigo() + ";" + vAnt.dato.getNombre() + "|" + camino;
             }
         }
 
-        String response1 = "El camino del vertice " + vertOrigen + " al vertice "+ vertices[posDestino] + " es: " + camino;
-        String response2 = " El costo del camino entre "+ vertOrigen +" y "+ vertices[posDestino] +" es: " + costos[posDestino];
-        return response1 + response2;
+        return costos[posDestino] + "-" + camino;
     }
 
     private int obtenerSiguienteVerticeNoVisitadoDeMenorCosto(double[] costos, boolean[] visitados) {

@@ -130,12 +130,8 @@ public class Main {
 
         sistema.getConexiones().imprimirGrafo();
 
-        System.out.println("\n" + "----------TEST:   ----------" + "\n");
-
         System.out.println(sistema.actualizarCamino("MMM123", "FFF123",
                 1, 1, 30, 30, EstadoCamino.BUENO));
-
-        System.out.println("\n" + "----------TEST:  ----------" + "\n");
 
         sistema.getConexiones().imprimirGrafo();
 
@@ -152,16 +148,6 @@ public class Main {
 
         System.out.println(sistema.viajeCostoMinimoEuros("MMM123", "FFF123"));
         System.out.println(sistema.viajeCostoMinimoEuros("AEA143", "ABQ143"));
-
-
-        System.out.println("\n" + ">>> PRIMERO SIN CAMINO : PRUEBA ERROR 3  ----------" + "\n");
-        System.out.println(sistema.viajeCostoMinimoKilometros("MMM123", "ZZZ258"));
-        System.out.println(sistema.registrarConexion("AAA143", "ZZZ258",
-                12, 1, 30, 30, EstadoCamino.BUENO));
-        System.out.println(sistema.registrarConexion("MMM123", "AAA143",
-                13, 1, 30, 30, EstadoCamino.BUENO));
-
-
 
         System.out.println("\n" + ">>> TRAS AGREGAR ESTACIONES INTERMEDIAS ----------" + "\n");
         System.out.println(sistema.viajeCostoMinimoKilometros("MMM123", "ZZZ258"));
