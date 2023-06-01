@@ -210,7 +210,6 @@ public class ABB {
                 stack.push(nodo.getDerecho());
             }
         }
-
-        return mensaje.toString();
+        return mensaje.toString().substring(0, mensaje.toString().length()-1);
     }
 }
