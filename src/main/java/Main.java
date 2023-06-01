@@ -1,10 +1,13 @@
 import interfaz.EstadoCamino;
 import interfaz.Consulta;
+import interfaz.Nacionalidad;
 import sistema.ImplementacionSistema;
 
 public class Main {
     public static void main(String args[]) {
         ImplementacionSistema sistema = new ImplementacionSistema();
+        Nacionalidad nacionalidad = Nacionalidad.ReinoUnido;
+
         System.out.println(sistema.inicializarSistema(9));
 
         System.out.println("----------TESTEO METODO registrarPasajero----------" + "\n");
@@ -54,7 +57,7 @@ public class Main {
 
         System.out.println("\n" + "----------TESTEO METODO listarPasajerosPorNacionalidad----------" + "\n");
 
-        System.out.println(sistema.listarPasajerosPorNacionalidad("UK"));
+        System.out.println(sistema.listarPasajerosPorNacionalidad(nacionalidad));
 
         System.out.println("\n" + "----------TEST: Registrar conexión  ----------" + "\n");
 

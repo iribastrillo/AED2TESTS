@@ -6,7 +6,7 @@ import dominio.vo.*;
 import estructuras.ABB;
 import estructuras.Grafo;
 import interfaz.*;
-import dominio.vo.Nacionalidad;
+import interfaz.Nacionalidad;
 
 public class ImplementacionSistema implements Sistema {
     private int maxEstaciones;
@@ -114,15 +114,12 @@ public class ImplementacionSistema implements Sistema {
     }
 
     @Override
-    public Retorno listarPasajerosPorNacionalidad(interfaz.Nacionalidad nacionalidad) {
-        return null;
-    }
-    public Retorno listarPasajerosPorNacionalidad(String nacionalidad) {
-        Nacionalidad isValid = Nacionalidad.fromCodigo(nacionalidad);
-        if (nacionalidad == null || nacionalidad.replaceAll("\\s", "").length() == 0) {
+    public Retorno listarPasajerosPorNacionalidad(Nacionalidad nacionalidad) {
+        Nacionalidad isValid = Nacionalidad.fromCodigo(nacionalidad.getCodigo());
+        if (nacionalidad == null || nacionalidad.getCodigo().length() == 0) {
             return Retorno.error1("Falta ingresar una nacionalidad, las posibilidades son: FR - DE - ES - UK - OT");
         } else if (isValid != null){
-            return Retorno.ok(abbPasajeros.imprimirPorNacionalidad(nacionalidad));
+            return Retorno.ok(abbPasajeros.imprimirPorNacionalidad(nacionalidad.getCodigo()));
         } else{
             return Retorno.error2("Debe ingresar una nacionalidad valida !");
         }

@@ -3,6 +3,8 @@ package estructuras;
 import dominio.Pasajero;
 import interfaz.Consulta;
 
+import java.util.Stack;
+
 public class ABB {
 
     private Nodo raiz;
@@ -190,23 +192,25 @@ public class ABB {
 
     public String imprimirPorNacionalidad(String codigoNacionalidad) {
         StringBuilder mensaje = new StringBuilder();
-        imprimirPorNacionalidadRecurisvo(this.raiz, codigoNacionalidad, mensaje);
-        return mensaje.toString();
-    }
+        Stack<Nodo> stack = new Stack<>();
+        stack.push(this.raiz);
 
-    private String imprimirPorNacionalidadRecurisvo(Nodo nodo, String codigoNacionalidad, StringBuilder mensaje) {
-        if (nodo != null) {
-            String nacionalidad = nodo.getPasajero().getId().substring(0, 2);
+        while (!stack.isEmpty()) {
+            Nodo nodo = stack.pop();
+            if (nodo != null) {
+                String nacionalidad = nodo.getPasajero().getId().substring(0, 2);
 
-            if (nacionalidad.equals(codigoNacionalidad)) {
-                mensaje.append(nodo.getPasajero().getId() + ";"
-                        + nodo.getPasajero().getNombre() + ";"
-                        + nodo.getPasajero().getEdad() + ";"
-                        + nacionalidad + "|");
+                if (nacionalidad.equals(codigoNacionalidad)) {
+                    mensaje.append(nodo.getPasajero().getId()).append(";")
+                            .append(nodo.getPasajero().getNombre()).append(";")
+                            .append(nodo.getPasajero().getEdad()).append(";")
+                            .append(nacionalidad).append("|");
+                }
+                stack.push(nodo.getIzquierdo());
+                stack.push(nodo.getDerecho());
             }
-            imprimirPorNacionalidadRecurisvo(nodo.getIzquierdo(), codigoNacionalidad, mensaje);
-            imprimirPorNacionalidadRecurisvo(nodo.getDerecho(), codigoNacionalidad, mensaje);
         }
+
         return mensaje.toString();
     }
 }
